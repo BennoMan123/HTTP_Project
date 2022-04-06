@@ -1,0 +1,24 @@
+.root {
+  -fx-background-color: aliceblue;
+}
+
+.label {
+   -fx-text-fill: darkblue; 
+   -fx-font: 16 serif;
+   -fx-font-weight: bold;
+}
+
+.button {
+   -fx-background-color: darkblue; 
+   -fx-text-fill: white; 
+   -fx-font-weight: bold;
+}
+
+.button:hover {
+   -fx-text-fill: darkblue; 
+   -fx-background-color: #68bff4;
+}
+
+.text-area .content{
+   -fx-background-color: #f4f8fb;
+}
