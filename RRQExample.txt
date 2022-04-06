@@ -1,0 +1,18 @@
+Read ReQuest Example with file greater than 512 bytes
+
+Client: sends over RRQ packet which also grants client access to Server
+Server: sends over DATA packet to Client, Block #1
+Client: sends over ACK packet to Server, Block #1
+Server: sends over DATA packet to Client, Block #2 (last packet, data < 512)
+Client: sends over ACK packet to Server, Block #2
+
+Write ReQuest Example with file greater than 512 bytes
+
+Client: sends over WRQ packet which also grants client access to Server
+Server: sends over ACK packet, Block #0
+Client: sends over DATA packet, Block #1
+Server: sends over ACK packet, Block #1
+Client: sends over DATA packet, Block #2
+Server: sends over ACK packet, Block #2
+
+(Source: http://www.indigoo.com/dox/itdp/07_FTP-TFTP/TFTP.pdf slide 9)
