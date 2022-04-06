@@ -43,8 +43,7 @@ public class ACKPacket extends Packet implements TFTPConstants {
     */
    public DatagramPacket build() {
       //creates the output array length
-      ByteArrayOutputStream baos = new ByteArrayOutputStream(
-         2 /*opcode*/ + 2/*blockNo*/);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream(2 /*opcode*/ + 2/*blockNo*/);
       
       // sets up the data output stream and then writes all the necessary info
       DataOutputStream dos = null;
@@ -72,8 +71,7 @@ public class ACKPacket extends Packet implements TFTPConstants {
    public void dissect(DatagramPacket ackPkt) {
       // Create a ByteArrayInputStream from the payload
       // NOTE: give the packet data, offset, and length to ByteArrayInputStream
-      ByteArrayInputStream bais =
-         new ByteArrayInputStream(ackPkt.getData(), ackPkt.getOffset(), ackPkt.getLength());
+      ByteArrayInputStream bais = new ByteArrayInputStream(ackPkt.getData(), ackPkt.getOffset(), ackPkt.getLength());
    
       DataInputStream dis = new DataInputStream(bais);
       

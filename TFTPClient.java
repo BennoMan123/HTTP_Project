@@ -80,8 +80,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
       // Row 3 - Folder TextField with Scrollbar
       // Initial Folder (P02)
       File initial = new File("."); 
-      tfFolder.setFont(Font.font(
-         "MONOSPACED", FontWeight.NORMAL, tfFolder.getFont().getSize()));
+      tfFolder.setFont(Font.font("MONOSPACED", FontWeight.NORMAL, tfFolder.getFont().getSize()));
       tfFolder.setText(initial.getAbsolutePath());
       tfFolder.setPrefColumnCount(tfFolder.getText().length());
       tfFolder.setDisable(true);
@@ -125,8 +124,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
       // set stage position
       stage.setX(200);
       stage.setY(100);
-      stage.show();       
-
+      stage.show();
    } // end start
    
    /** ActionEvent handler for button clicks*/
@@ -174,11 +172,10 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          FileChooser fileChooser = new FileChooser();
          fileChooser.setInitialDirectory(new File(tfFolder.getText()));
          fileChooser.setTitle("Select the Local File to Upload");
-         fileChooser.getExtensionFilters().addAll(
-            new ExtensionFilter("All Files", "*.*")); 
+         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*")); 
          File locFile = fileChooser.showOpenDialog(stage);
          // if no local file is chosen
-         if(locFile == null) {
+         if (locFile == null) {
             log("No local file chosen... cancelled!");
             return;
          }
@@ -191,7 +188,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          td.showAndWait();
          // result is user entered file name
          String remoteFileName = td.getResult();
-         if(remoteFileName == null || remoteFileName.equals("")) {
+         if (remoteFileName == null || remoteFileName.equals("")) {
             log("No remote file name chosen!");
             return;
          }
@@ -281,15 +278,15 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                iServer = packet.getAddress();
                opcode = packet.getOpcode();
                // check received packet's op code... should be 4 (ACK packet)
-               if(opcode == ERROR) {
+               if (opcode == ERROR) {
                   readError(dgmPktRec);
                   return;
-               } else if(opcode != ACK) {
+               }
+               else if (opcode != ACK) {
                   log("Unexpected opcode received from server... Sending Error Packet");
                   // Create ERRORPacket and send
                   String errMsg = "Unexpected opcode";
                   ERRORPacket errPkt = new ERRORPacket(iServer, serverPort, ILLOP, errMsg); // illegal opcode error
-                  //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                   DatagramPacket dgmErr = errPkt.build();
                   dSocket.send(dgmErr);
                   return;
@@ -402,7 +399,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          td.showAndWait();
          // result is user entered file name
          String remoteFileName = td.getResult();
-         if(remoteFileName == null || remoteFileName.equals("")){
+         if (remoteFileName == null || remoteFileName.equals("")){
             log("No remote file name chosen!");
             return;
          }
@@ -411,11 +408,10 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          FileChooser fileChooser = new FileChooser();
          fileChooser.setInitialDirectory(new File(tfFolder.getText()));
          fileChooser.setTitle("Select/Enter the file name for saving the download");
-         fileChooser.getExtensionFilters().addAll(
-            new ExtensionFilter("All Files", "*.*")); 
+         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*")); 
          File locFile = fileChooser.showSaveDialog(stage);
          // if no local file is chosen
-         if(locFile == null) {
+         if (locFile == null) {
             log("No local file chosen... cancelled!");
             return;
          }
@@ -489,7 +485,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                   log("DATA not received - upload timed out");
                   return;
                }
-
+            
                Packet packet = new Packet();   // create generic packet - don't know opcode yet
                packet.packetChecker(dgmPktRec);
                // generic packet contains opcode, InetAddress, and port  
@@ -497,14 +493,14 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                iServer = packet.getAddress();
                opcode = packet.getOpcode();
                // check received packet's opcode... should be 3 (DATA packet)
-               if(opcode == ERROR) {
+               if (opcode == ERROR) {
                   readError(dgmPktRec);
                   return;
-               } else if(opcode != DATA) {
+               }
+               else if (opcode != DATA) {
                   // Create ERRORPacket and send
                   String errMsg = "Unexpected opcode";
                   ERRORPacket errPkt = new ERRORPacket(iServer, serverPort, ILLOP, errMsg); // illegal opcode error
-                  //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                   DatagramPacket dgmErr = errPkt.build();
                   dSocket.send(dgmErr);
                   return;
@@ -525,7 +521,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                size = dataPkt.getDataLen();
             
                // do on first pass (when dos is not instantiated)
-               if(dos == null) { 
+               if (dos == null) { 
                   log("Client Download -- Opening file: " + locFileName);
                   try {
                      dos = new DataOutputStream(new FileOutputStream(locFile)); 
@@ -535,7 +531,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                      // Create ERRORPacket and send
                      String errMsg = "Client is unable to create file for download";
                      ERRORPacket errPkt = new ERRORPacket(iServer, serverPort, UNDEF, errMsg);
-                     //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                      DatagramPacket dgmErr = errPkt.build();
                      dSocket.send(dgmErr);
                      return;

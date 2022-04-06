@@ -54,8 +54,7 @@ public class ERRORPacket extends Packet implements TFTPConstants {
     */
    public DatagramPacket build() {
       // creates the output array length
-      ByteArrayOutputStream baos = new ByteArrayOutputStream(
-         2 /*opcode*/ + 2/*Ecode*/ + errorMsg.length() + 1 /*0*/);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream(2 /*opcode*/ + 2/*Ecode*/ + errorMsg.length() + 1 /*0*/);
       
       // sets up the data output stream and then writes all the necessary info
       DataOutputStream dos = null;
@@ -85,8 +84,7 @@ public class ERRORPacket extends Packet implements TFTPConstants {
    public void dissect(DatagramPacket errPkt) {
       // Create a ByteArrayInputStream from the payload
       // NOTE: give the packet data, offset, and length to ByteArrayInputStream
-      ByteArrayInputStream bais =
-         new ByteArrayInputStream(errPkt.getData(), errPkt.getOffset(), errPkt.getLength());
+      ByteArrayInputStream bais = new ByteArrayInputStream(errPkt.getData(), errPkt.getOffset(), errPkt.getLength());
    
       DataInputStream dis = new DataInputStream(bais);
       

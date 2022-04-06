@@ -125,7 +125,6 @@ public class WRQPacket extends Packet implements TFTPConstants {
       catch(Exception e) {
          System.out.println(e);
       }
-      
       return "";
    } // end readToZ
 }

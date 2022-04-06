@@ -94,8 +94,7 @@ public class DATAPacket extends Packet implements TFTPConstants {
    public void dissect(DatagramPacket dataPkt) {
       // Create a ByteArrayInputStream from the payload
       // NOTE: give the packet data, offset, and length to ByteArrayInputStream
-      ByteArrayInputStream bais =
-         new ByteArrayInputStream(dataPkt.getData(), dataPkt.getOffset(), dataPkt.getLength());
+      ByteArrayInputStream bais = new ByteArrayInputStream(dataPkt.getData(), dataPkt.getOffset(), dataPkt.getLength());
    
       DataInputStream dis = new DataInputStream(bais);
       

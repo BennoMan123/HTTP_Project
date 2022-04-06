@@ -77,8 +77,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
       // Row 2 - Folder Text Field with Scrollbar
       // Initial Folder (P02)
       File initial = new File(".");
-      tfFolder.setFont(Font.font(
-         "MONOSPACED", FontWeight.NORMAL, tfFolder.getFont().getSize()));
+      tfFolder.setFont(Font.font("MONOSPACED", FontWeight.NORMAL, tfFolder.getFont().getSize()));
       tfFolder.setText(initial.getAbsolutePath());
       tfFolder.setPrefColumnCount(tfFolder.getText().length());
       tfFolder.setDisable(true);
@@ -118,7 +117,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
       // set stage position
       stage.setX(800);
       stage.setY(100);
-      stage.show();    
+      stage.show();
    }
    
    /** ActionEvent handler for button clicks*/
@@ -145,7 +144,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
     * doStartStop - starts or stops the server
     */
    public void doStartStop() {
-      if(btnStartStop.getText().equals("Start")) {  // change Start btn to Stop btn
+      if (btnStartStop.getText().equals("Start")) {  // change Start btn to Stop btn
          btnStartStop.setText("Stop");
          btnStartStop.setStyle("-fx-background-color: #ff0000;"); // change button color to red
          lblStartStop.setText("Stop the server: ");
@@ -155,20 +154,21 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
          ServerThread st = new ServerThread();
          st.start();
          log("< Server started >");
-      } else {  // change Stop btn to Start btn
+      }
+      else {  // change Stop btn to Start btn
          btnStartStop.setText("Start");
          btnStartStop.setStyle("-fx-background-color: #30c224;"); // change button color to green
          lblStartStop.setText("Start the server: ");
          tfFolder.setDisable(false);  // P02
          btnChooseFolder.setDisable(false);  // P02
          // close socket
-         if(mainSocket != null) {
+         if (mainSocket != null) {
             try {
                mainSocket.close();
             }
             catch(Exception e) {
               // reset socket
-              log("Exception in stop: " + e);
+               log("Exception in stop: " + e);
             }
             mainSocket = null;
          }
@@ -267,7 +267,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
          catch (Exception e) {
             log("ClientThread Exception: " + e);
             return;
-         } 
+         }
          
          try {
             // In this try-catch run the protocol, using firstPkt as
@@ -281,15 +281,16 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
             if (opcode == RRQ) {
                log("<--- Server received RRQPacket");
                doDownload(firstPkt);
-            } else if (opcode == WRQ) {
+            }
+            else if (opcode == WRQ) {
                log("<--- Server received WRQPacket");
                doUpload(firstPkt);
-            } else { // ex. DATAPacket or ACKPacket as first packet
+            }
+            else { // ex. DATAPacket or ACKPacket as first packet
                log("Unexpected opcode received from client... Sending Error Packet");
                // Create ERRORPacket and send
                String errMsg = "Unexpected opcode";
                ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, ILLOP, errMsg); // illegal opcode error
-               //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                DatagramPacket dgmErr = errPkt.build();
                cSocket.send(dgmErr);
             }    
@@ -299,7 +300,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
             // Create ERRORPacket and send
             String errMsg = "Error checking received packet";
             ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, UNDEF, errMsg);
-               //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
             DatagramPacket dgmErr = errPkt.build();
             try {
                cSocket.send(dgmErr);
@@ -354,7 +354,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
          // create ACK
          // P06
          ACKPacket ackPkt = new ACKPacket(iServer, clientPort, blockNo);
-         //  (InetAddress _toAddress, int _port, int _blockNo)
          dgmPkt = ackPkt.build();
          
          log("Starting Server UPLOAD -- sending ACKPacket (" + blockNo + ")");
@@ -384,14 +383,14 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                // generic packet contains opcode, InetAddress, and port                  
                opcode = packet.getOpcode();
                // check if opcode is an ERROR
-               if(opcode == ERROR) {
+               if (opcode == ERROR) {
                   readError(dgmPkt);
-               } else if(opcode != DATA) { // if it's anything but DATA or ERROR, send ERRORPacket
+               }
+               else if (opcode != DATA) { // if it's anything but DATA or ERROR, send ERRORPacket
                   log("Unexpected opcode received from client... Sending Error Packet");
                   // Create ERRORPacket and send
                   String errMsg = "Unexpected opcode";
                   ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, ILLOP, errMsg); // illegal opcode error
-                  //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                   DatagramPacket dgmErr = errPkt.build();
                   cSocket.send(dgmErr);
                   return;
@@ -402,9 +401,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                // increment blockNo
                blockNo++;
             
-               // opcode checked as 3 (DATAPacket)
-               // DATAPacket dataPkt = new DATAPacket(iServer, clientPort, blockNo, maxData, size);
-                                                  // (InetAddress _toAddress, int _port, int _blockNo, byte[] _data, int _dataLen)            
                DATAPacket dataPkt = new DATAPacket();
                dataPkt.dissect(dgmPkt);
                log("<-- Server received reply! DATAPacket (" + dataPkt.getBlockNo() + ")");
@@ -413,10 +409,9 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                size = dataPkt.getDataLen();
             
                // do on first pass (when dos is not instantiated)
-               if(dos == null) {
+               if (dos == null) {
                   log("Server Download -- Opening file: " + fileName);
                
-                  // https://www.journaldev.com/825/java-create-new-file
                   String fileSeparator = System.getProperty("file.separator");
                   String absoluteFilePath = fileSeparator + tfFolder.getText() + fileSeparator + fileName;
                   File file = new File(absoluteFilePath);
@@ -428,7 +423,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                      // Create ERRORPacket and send
                      String errMsg = "Server is unable to open file for upload";
                      ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, ACCESS, errMsg);
-                     //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                      DatagramPacket dgmErr = errPkt.build();
                      cSocket.send(dgmErr);
                      return;
@@ -453,7 +447,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
             // Create ERRORPacket and send
             String errMsg = "Exception during upload " + e;
             ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, UNDEF, errMsg);
-               //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
             DatagramPacket dgmErr = errPkt.build();
             try {
                cSocket.send(dgmErr);
@@ -507,7 +500,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
             // Create ERRORPacket and send
             String errMsg = "File does not exist";
             ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, NOTFND, errMsg); // File Not Found error code
-            //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
             DatagramPacket dgmErr = errPkt.build();
             try {
                cSocket.send(dgmErr);
@@ -526,7 +518,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                   // do on first pass (when dis is not instantiated)
                   if (dis == null) {                            
                      try {
-                        // https://www.journaldev.com/825/java-create-new-file
                         String fileSeparator = System.getProperty("file.separator");
                         String absoluteFilePath = fileSeparator + tfFolder.getText() + fileSeparator + fileName;
                         File file = new File(absoluteFilePath);
@@ -537,7 +528,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                         // Create ERRORPacket and send
                         String errMsg = "Server is unable to open file for download";
                         ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, ACCESS, errMsg);
-                        //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                         DatagramPacket dgmErr = errPkt.build();
                         cSocket.send(dgmErr);
                         return;
@@ -568,7 +558,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                   // create DATAPacket to send file contents
                   // P06
                   DATAPacket dataPkt = new DATAPacket(iServer, clientPort, blockNo, maxData, readSize);
-                  //                   (InetAddress _toAddress, int _port, int _blockNo, byte[] _data, int _dataLen)
                   dgmPkt = dataPkt.build();
                      
                   log("--> Server sending DATAPacket (" + blockNo + ")");
@@ -590,14 +579,13 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
                   // generic packet contains opcode, InetAddress, and port                
                   opcode = packet.getOpcode();
                   // check received packet's op code... should be 4 (ACK packet)
-                  if(opcode == ERROR) {
+                  if (opcode == ERROR) {
                      readError(dgmPkt);
                      return;
-                  } else if(opcode != ACK) {
+                  } else if (opcode != ACK) {
                      // Create ERRORPacket and send
                      String errMsg = "Unexpected opcode";
                      ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, ILLOP, errMsg);
-                     //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                      DatagramPacket dgmErr = errPkt.build();
                      cSocket.send(dgmErr);
                      return;
@@ -618,7 +606,6 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
             // Create ERRORPacket and send
             String errMsg = "Exception during download";
             ERRORPacket errPkt = new ERRORPacket(iServer, clientPort, UNDEF, errMsg);
-            //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
             DatagramPacket dgmErr = errPkt.build();
             try {
                cSocket.send(dgmErr);
@@ -666,7 +653,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
       File dir = new File(tfFolder.getText());
       File[] folderContents = dir.listFiles();
       for (File f: folderContents) {
-         if(fileName.equals(f.getName())) {
+         if (fileName.equals(f.getName())) {
             return true;
          }
       }
