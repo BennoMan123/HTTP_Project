@@ -9,10 +9,10 @@ import java.io.*;
  */
 
 public class ERRORPacket extends Packet implements TFTPConstants {
-   // attributes
+   //Attributes
    private int errorNo;
    private String errorMsg;
-   
+
    /**
     * Constructor
     * @param _toAddress the destination address
@@ -25,13 +25,13 @@ public class ERRORPacket extends Packet implements TFTPConstants {
       errorNo = _errorNo;
       errorMsg = _errorMsg;
    }
-   
+
    /**
     * Default Constructor
     */
    public ERRORPacket() {}
-   
-   // Accessor methods
+
+   //Accessor methods
    /**
     * getErrorMsg
     * @return errorMsg
@@ -39,7 +39,7 @@ public class ERRORPacket extends Packet implements TFTPConstants {
    public String getErrorMsg() {
       return errorMsg;
    }
-   
+
    /**
     * getErrorNo
     * @return errorNo
@@ -47,62 +47,58 @@ public class ERRORPacket extends Packet implements TFTPConstants {
    public int getErrorNo() {
       return errorNo;
    }
-   
+
    /**
     * build
     * @return errPkt the error datagram packet
     */
    public DatagramPacket build() {
-      // creates the output array length
+      //Creates the output array length
       ByteArrayOutputStream baos = new ByteArrayOutputStream(2 /*opcode*/ + 2/*Ecode*/ + errorMsg.length() + 1 /*0*/);
-      
-      // sets up the data output stream and then writes all the necessary info
+      //Sets up the data output stream and then writes all the necessary info
       DataOutputStream dos = null;
+
       try {
          dos = new DataOutputStream(baos);
          dos.writeShort(ERROR);
          dos.writeShort(errorNo);
          dos.writeBytes(errorMsg);
          dos.writeByte(0);
-         
-         // Close
+         //Close
          dos.close();
       }
       catch (Exception e) {
          System.out.println(e);
       }
-      
-      byte[] holder = baos.toByteArray();   // Get the underlying byte[]
-      DatagramPacket errPkt = new DatagramPacket(holder, holder.length, super.getAddress(), super.getPort());  // Build a DatagramPacket from the byte[]
-      return errPkt; // returns the packet
-   } // end build
+
+      byte[] holder = baos.toByteArray(); //Get the underlying byte[]
+      DatagramPacket errPkt = new DatagramPacket(holder, holder.length, super.getAddress(), super.getPort());  //Build a DatagramPacket from the byte[]
+      return errPkt; //Returns the packet
+   } //End build
    
    /**
     * dissect
     * @param errPkt the error datagram packet
     */
    public void dissect(DatagramPacket errPkt) {
-      // Create a ByteArrayInputStream from the payload
-      // NOTE: give the packet data, offset, and length to ByteArrayInputStream
+      //Create a ByteArrayInputStream from the payload
+      //NOTE: give the packet data, offset, and length to ByteArrayInputStream
       ByteArrayInputStream bais = new ByteArrayInputStream(errPkt.getData(), errPkt.getOffset(), errPkt.getLength());
-   
       DataInputStream dis = new DataInputStream(bais);
-      
-      // reads the information
+
+      //Reads the information
       try {
          dis.readShort();
          errorNo = dis.readShort();
          errorMsg = readToZ(dis);
-         
-         // Close
+         //Close
          dis.close();
       }
       catch(Exception e) {
          System.out.println(e);
       }
-   } // end dissect
-   
-   
+   } //End dissect
+
    /**
     * readToZ - utility method for reading packet error message
     * @param dis the DataInputStream
@@ -120,5 +116,5 @@ public class ERRORPacket extends Packet implements TFTPConstants {
             System.out.println(e);
          }
       }
-   } // end readToZ
+   } //End readToZ
 }

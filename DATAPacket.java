@@ -9,11 +9,11 @@ import java.io.*;
  */
 
 public class DATAPacket extends Packet implements TFTPConstants {
-   // attributes
+   //Attributes
    private int blockNo;
    private int dataLen;
    private byte[] data;
-   
+
    /**
     * Constructor
     * @param _toAddress the destination address
@@ -28,13 +28,13 @@ public class DATAPacket extends Packet implements TFTPConstants {
       data = _data;
       dataLen = _dataLen;
    }
-   
+
    /**
     * Default Constructor
     */
    public DATAPacket() {}
-   
-   // Accessor methods 
+
+   //Accessor methods 
    /**
     * getBlockNo
     * @return blockNo
@@ -50,7 +50,7 @@ public class DATAPacket extends Packet implements TFTPConstants {
    public byte[] getData() {
       return data;
    }
-   
+
    /**
     * getDataLen
     * @return dataLen
@@ -64,40 +64,38 @@ public class DATAPacket extends Packet implements TFTPConstants {
     * @return dataPkt the data datagram packet
     */
    public DatagramPacket build() {
-      //creates the output array length
+      //Creates the output array length
       ByteArrayOutputStream baos = new ByteArrayOutputStream(2 /*opcode*/ + 2/*blockNo*/ + dataLen/*bytes 0-512*/);
-      
-      //sets up the data output stream and then writes all the necessary info
+      //Sets up the data output stream and then writes all the necessary info
       DataOutputStream dos = null;
+
       try {
          dos = new DataOutputStream(baos);
          dos.writeShort(DATA);
          dos.writeShort(blockNo);
          dos.write(data, 0, dataLen);
-      
-         // Close
+         //Close
          dos.close();
       }
       catch(Exception e) {
          System.out.println(e);
       }
-      
-      byte[] holder = baos.toByteArray();   // Get the underlying byte[]
+
+      byte[] holder = baos.toByteArray(); //Get the underlying byte[]
       DatagramPacket dataPkt = new DatagramPacket(holder, holder.length, super.getAddress(), super.getPort());
-      return dataPkt; // returns the packet
-   } // end build
-   
+      return dataPkt; //Returns the packet
+   } //End build
+
    /**
     * dissect
     * @param dataPkt the data datagram packet
     */
    public void dissect(DatagramPacket dataPkt) {
-      // Create a ByteArrayInputStream from the payload
-      // NOTE: give the packet data, offset, and length to ByteArrayInputStream
+      //Create a ByteArrayInputStream from the payload
+      //NOTE: give the packet data, offset, and length to ByteArrayInputStream
       ByteArrayInputStream bais = new ByteArrayInputStream(dataPkt.getData(), dataPkt.getOffset(), dataPkt.getLength());
-   
       DataInputStream dis = new DataInputStream(bais);
-      
+
       try {
          super.setOpcode(dis.readShort());
          blockNo = dis.readShort();
@@ -106,12 +104,11 @@ public class DATAPacket extends Packet implements TFTPConstants {
          for (int i = 0; i < data.length; i++) {
             data[i] = dis.readByte();
          }
-                  
-         // Close
+         //Close
          dis.close();
       }
       catch (Exception e) {
          System.out.println(e);
       }
-   } // end dissect
+   } //End dissect
 }

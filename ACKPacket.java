@@ -9,9 +9,9 @@ import java.io.*;
  */
 
 public class ACKPacket extends Packet implements TFTPConstants {
-   // attributes
+   //Attribute
    private int blockNo;
-   
+
    /**
     * Constructor
     * @param _toAddress the destination address
@@ -22,13 +22,13 @@ public class ACKPacket extends Packet implements TFTPConstants {
       super(_toAddress, _port, ACK);
       blockNo = _blockNo;
    }
-   
+
    /**
     * Default Constructor
     */
    public ACKPacket() {}
-   
-   // Accessor method
+
+   //Accessor method
    /**
     * getBlockNo
     * @return blockNo
@@ -36,55 +36,52 @@ public class ACKPacket extends Packet implements TFTPConstants {
    public int getBlockNo() {
       return blockNo;
    }
-   
+
    /**
     * build
     * @return ackPkt the acknowledgement datagram packet
     */
    public DatagramPacket build() {
-      //creates the output array length
+      //Creates the output array length
       ByteArrayOutputStream baos = new ByteArrayOutputStream(2 /*opcode*/ + 2/*blockNo*/);
-      
-      // sets up the data output stream and then writes all the necessary info
+
+      //Sets up the data output stream and then writes all the necessary info
       DataOutputStream dos = null;
       try {
          dos = new DataOutputStream(baos);
          dos.writeShort(ACK);
          dos.writeShort(blockNo);
-         
-         // Close
+         //Close
          dos.close();
       }
       catch (Exception e) {
          System.out.println(e);
       }
       
-      byte[] holder = baos.toByteArray();   // Get the underlying byte[]
-      DatagramPacket ackPkt = new DatagramPacket(holder, holder.length, super.getAddress(), super.getPort());  // Build a DatagramPacket from the byte[]
-      return ackPkt; // returns the packet
-   } // end build
-   
+      byte[] holder = baos.toByteArray(); //Get the underlying byte[]
+      DatagramPacket ackPkt = new DatagramPacket(holder, holder.length, super.getAddress(), super.getPort());  //Build a DatagramPacket from the byte[]
+      return ackPkt; //Returns the packet
+   } //End build
+
    /**
     * dissect
     * @param ackPkt the acknowledgement datagram packet
     */
    public void dissect(DatagramPacket ackPkt) {
-      // Create a ByteArrayInputStream from the payload
-      // NOTE: give the packet data, offset, and length to ByteArrayInputStream
+      //Create a ByteArrayInputStream from the payload
+      //NOTE: give the packet data, offset, and length to ByteArrayInputStream
       ByteArrayInputStream bais = new ByteArrayInputStream(ackPkt.getData(), ackPkt.getOffset(), ackPkt.getLength());
-   
       DataInputStream dis = new DataInputStream(bais);
-      
-      // gets opcode & block number
+
+      //Gets opcode & block number
       try {
          super.setOpcode(dis.readShort());
          blockNo = dis.readShort();
-         
-         // Close
+         //Close
          dis.close();
       }
       catch (Exception e) {
          System.out.println(e);
       }
-   } // end dissect
+   } //End dissect
 }

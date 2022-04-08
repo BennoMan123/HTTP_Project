@@ -7,13 +7,12 @@ import java.io.*;
  * @author String teamName = null; (Members: Kelly Appleton, Michael Benno, Ethan Gapay)
  * @version 2021-05-04
  */
-
 public class Packet implements TFTPConstants {
-   // attributes used for each packet
+   //Attributes used for each packet
    private InetAddress toAddress;
    private int port;
    private int opcode;
-   
+
    /**
     * Constructor
     * @param _toAddress the destination address
@@ -25,13 +24,13 @@ public class Packet implements TFTPConstants {
       port = _port;
       opcode = _opcode;
    }
-   
+
    /**
     * Default Constructor
     */
    public Packet() {}
-   
-   // Accessor methods
+
+   //Accessor methods
    /**
     * getAddress
     * @return toAddress
@@ -39,7 +38,7 @@ public class Packet implements TFTPConstants {
    public InetAddress getAddress() {
       return toAddress;
    }
-   
+
    /**
     * getPort
     * @return port
@@ -47,7 +46,7 @@ public class Packet implements TFTPConstants {
    public int getPort() {
       return port;
    }
-   
+
    /**
     * getOpcode
     * @return opcode
@@ -55,8 +54,8 @@ public class Packet implements TFTPConstants {
    public int getOpcode() {
       return opcode;
    }
-   
-   // Mutator methods
+
+   //Mutator methods
    /**
     * setAddress
     * @param _toAddress the IP address to set the InetAddress to
@@ -72,7 +71,7 @@ public class Packet implements TFTPConstants {
    public void setPort(int _port) {
       port = _port;
    }
-   
+
    /**
     * setOpcode
     * @param _opcode the opcode to set
@@ -80,21 +79,20 @@ public class Packet implements TFTPConstants {
    public void setOpcode(int _opcode) {
       opcode = _opcode;
    }
-   
+
    /**
     * packetChecker
     * @param packet - the datagram packet to check
     */
    public void packetChecker(DatagramPacket packet) {
-      // sets up the input streams and gets the port, address, and opcode
+      //Sets up the input streams and gets the port, address, and opcode
       ByteArrayInputStream bais = new ByteArrayInputStream(packet.getData(), packet.getOffset(), packet.getLength());
       DataInputStream dis = new DataInputStream(bais);
       try {
          opcode = dis.readShort();
          this.setAddress(packet.getAddress());
          this.setPort(packet.getPort());
-         
-         // Close
+         //Close
          bais.close();
          dis.close();
       }
