@@ -130,7 +130,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
    /** ActionEvent handler for button clicks*/
    public void handle(ActionEvent ae) {
       String command = ((Button) ae.getSource()).getText();
-      
       switch(command) {
          case "Choose Folder":
             doChooseFolder();
@@ -142,7 +141,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
             doDownload();
             break;
          default:
-            log("Invalid command");
+            log("Invalid command.");
             break;
       }
    } // end handle
@@ -207,7 +206,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
       }  
    }
    
-   
    // Inner Class
    class UploadThread extends Thread {
       private DatagramSocket dSocket = null;
@@ -224,7 +222,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
       public UploadThread(File _locFile, String _remoteFileName) {
          locFile = _locFile;
          remoteFileName = _remoteFileName;
-      
          try {
             // create a DatagramSocket on an available port
             dSocket = new DatagramSocket();
@@ -232,7 +229,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
             iServer = InetAddress.getByName(tfServer.getText());
          }
          catch(Exception e) {
-            log("Error starting upload " + e);
+            log("Error starting upload: " + e);
             return;
          }
       } // end constructor
@@ -249,7 +246,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
       
          // Upload/WRQ code
          // P06
-         
          WRQPacket wrqPkt = new WRQPacket(iServer, serverPort, remoteFileName, MODE);
          DatagramPacket dgmPkt = wrqPkt.build();
          
@@ -308,33 +304,31 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                      // Create ERRORPacket and send
                      String errMsg = "Server is unable to open file for upload";
                      ERRORPacket errPkt = new ERRORPacket(iServer, serverPort, ACCESS, errMsg);
-                     //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
                      DatagramPacket dgmErr = errPkt.build();
                      dSocket.send(dgmErr);
                      return;
                   }
                }
                          
-               if (readSize < 512) {  // won't be on first pass because we set readSize initially to 512
-                  break;              // break out of loop if < 512 read on prior loop
+               if (readSize < 512) { // won't be on first pass because we set readSize initially to 512
+                  break; // break out of loop if < 512 read on prior loop
                }
                     
                byte[] maxData = new byte[512];
-                  
                try {
-                  readSize = dis.read(maxData);  // set readSize to number of bytes read, allowing for up to 512
+                  readSize = dis.read(maxData); // set readSize to number of bytes read, allowing for up to 512
                }
                // Account for errors, empty files, and reaching end of file
                catch(EOFException eofe) {
                   readSize = 0;
                }
                catch(Exception e) {
-                  log("Exception " + e);
+                  log("Exception: " + e);
                   return;
                }
                   
                if (readSize == -1) {
-                  readSize = 0;    // to not pass -1 into dataPkt
+                  readSize = 0; // to not pass -1 into dataPkt
                }
                                 
                // increment blockNo
@@ -343,13 +337,11 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                // create DATAPacket to send file contents
                // P06
                DATAPacket dataPkt = new DATAPacket(iServer, serverPort, blockNo, maxData, readSize);
-                                                  // (InetAddress _toAddress, int _port, int _blockNo, byte[] _data, int _dataLen)
                dgmPkt = dataPkt.build();
                   
                // send DatagramPacket
                log("--> Client sending DATAPacket " + "(" + blockNo + ")");
                dSocket.send(dgmPkt);
-            
             } // end while  
             //close stream
             dis.close();
@@ -382,7 +374,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          
          // log file uploaded complete
          log("--- Uploading " + locFileName + " complete! ---\n");
-         
       } // end run
    } // end inner class UploadThread
    
@@ -415,8 +406,8 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
             log("No local file chosen... cancelled!");
             return;
          }
-         
          log("--- Starting Client Download ---");
+         
          // create and start DownloadThread
          DownloadThread dt = new DownloadThread(locFile, remoteFileName);
          dt.start();         
@@ -427,11 +418,10 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
       }  
    }
    
-   
    // Inner Class
    class DownloadThread extends Thread {
       private DatagramSocket dSocket = null;
-      private InetAddress iServer = null;   // IP address
+      private InetAddress iServer = null; // IP address
       private int serverPort = TFTP_PORT;
       private File locFile = null;
       private String remoteFileName = null;
@@ -447,7 +437,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          try {
             // create a DatagramSocket on an available port
             dSocket = new DatagramSocket();
-            dSocket.setSoTimeout(1000);  // set a timeout on the socket (P07)
+            dSocket.setSoTimeout(1000); // set a timeout on the socket (P07)
             iServer = InetAddress.getByName(tfServer.getText());
          }
          catch(Exception e) {
@@ -475,7 +465,7 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
             log("--> Client sending " + locFileName);
             dSocket.send(dgmPkt);
             
-            while(size == 512) {  // size initially set to 512, so first pass will always go in while loop
+            while(size == 512) { // size initially set to 512, so first pass will always go in while loop
                // prepare to receive DatagramPacket of max packet size
                DatagramPacket dgmPktRec = new DatagramPacket(new byte[MAX_PACKET], MAX_PACKET); 
                try {  // P07
@@ -514,7 +504,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
                // opcode checked as 3 (DATAPacket)
                DATAPacket dataPkt = new DATAPacket();
                dataPkt.dissect(dgmPktRec);
-               
                log("<-- Client received reply! DATAPacket (" + dataPkt.getBlockNo() + ")");
                
                // set size to length of data in DATAPacket
@@ -558,7 +547,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
             // Create ERRORPacket and send
             String errMsg = "Exception during download " + e;
             ERRORPacket errPkt = new ERRORPacket(iServer, serverPort, UNDEF, errMsg);
-            //  (InetAddress _toAddress, int _port, int _errorNo, String _errorMsg)
             DatagramPacket dgmErr = errPkt.build();    
             try {
                dSocket.send(dgmErr);
@@ -581,7 +569,6 @@ public class TFTPClient extends Application implements EventHandler<ActionEvent>
          
          // log file downloaded complete
          log("--- Downloading " + locFileName + " complete! ---\n");
-         
       } // end run
    } // end inner class DownloadThread
    

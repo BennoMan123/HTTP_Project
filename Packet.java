@@ -89,7 +89,6 @@ public class Packet implements TFTPConstants {
       // sets up the input streams and gets the port, address, and opcode
       ByteArrayInputStream bais = new ByteArrayInputStream(packet.getData(), packet.getOffset(), packet.getLength());
       DataInputStream dis = new DataInputStream(bais);
-      
       try {
          opcode = dis.readShort();
          this.setAddress(packet.getAddress());
@@ -99,9 +98,8 @@ public class Packet implements TFTPConstants {
          bais.close();
          dis.close();
       }
-      
       catch(Exception e) {
          System.out.println("Error in packetChecker: " + e);
       }
-   } // end packetChecker
+   }
 }
