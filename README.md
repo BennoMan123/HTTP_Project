@@ -20,6 +20,7 @@ From TFTP Constants class:
    */
    
    // octet request for file to be written or read in binary
+
    // if WRQ packet send from client first, Server sends back ACK with Block #0 
    
    /* DATA and ACK packet format
@@ -29,7 +30,8 @@ From TFTP Constants class:
    *  | Opcode | Block # |
    */
    
-   // Block # - number of block being sent over/read ex. sending over Block 1. sending over Block 2, etc. 
+   // Block # - number of block being sent over/read ex. sending over Block 1. sending over Block 2, etc.
+
    // Data - the packet being sent will always contain 512 bytes (unless its the last packet n < 512 bytes)
    
    
@@ -40,7 +42,9 @@ From TFTP Constants class:
     */
     
     // ErrorCode -> Ecode Constant
+
     // ErrMsg -> The error message is intended for human consumption, and should be in netascii (text) (source https://tools.ietf.org/html/rfc1350 below Figure 5-4: ERROR packet) 
     
    // WRQ and DATA packets are acknowledged by ACK or ERROR packets
+
    // RRQ and ACK packets are acknowledged by DATA or ERROR packets (source https://tools.ietf.org/html/rfc1350 above Figure 5-3: ACK packet)
