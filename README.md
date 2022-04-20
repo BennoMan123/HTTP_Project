@@ -1,3 +1,6 @@
+\*\*Removed import java.util.*; from client and server java files\*\*
+
+
 How to create .gitignore:
 
 https://stackoverflow.com/questions/10744305/how-to-create-a-gitignore-file
