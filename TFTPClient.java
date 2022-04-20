@@ -7,7 +7,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
 import javafx.geometry.*;
-import java.util.*;
 import java.net.*;
 import java.io.*;
 import javafx.stage.FileChooser.*;
@@ -16,7 +15,7 @@ import javafx.stage.FileChooser.*;
  * TFTPClient - a class for a client to communicate with a server via UDP for uploading and downloading files
  * Project
  * @author String teamName = null; (Members: Kelly Appleton, Michael Benno, Ethan Gapay)
- * @version 2021-05-04
+ * @version 2022-04-20
  */
 
 public class TFTPClient extends Application implements EventHandler<ActionEvent>, TFTPConstants {
