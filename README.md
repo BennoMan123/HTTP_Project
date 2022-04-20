@@ -1,4 +1,11 @@
+How to create .gitignore:
+
+https://stackoverflow.com/questions/10744305/how-to-create-a-gitignore-file
+
+
 Added all files from other location
+
+
 
 https://www.journaldev.com/825/java-create-new-file
 

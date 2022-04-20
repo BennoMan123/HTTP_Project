@@ -26,7 +26,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
    
    //GUI Components
    //Labels
-   private Label lblStartStop = new Label("Start the server: ");
+   private Label lblStartStop = new Label("Start The Server:");
    
    //Textfields
    private TextField tfFolder = new TextField();
@@ -150,14 +150,13 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
          tfFolder.setDisable(true);  //P02
          btnChooseFolder.setDisable(true);  //P02
          //Create and start a ServerThread
-         ServerThread st = new ServerThread();
-         st.start();
+         new ServerThread().start();
          log("< Server started >");
       }
       else { //Change Stop btn to Start btn
          btnStartStop.setText("Start");
          btnStartStop.setStyle("-fx-background-color: #30c224;"); //Change button color to green
-         lblStartStop.setText("Start the server: ");
+         lblStartStop.setText("Start The Server:");
          tfFolder.setDisable(false);  //P02
          btnChooseFolder.setDisable(false);  //P02
          //Close socket
@@ -231,8 +230,7 @@ public class TFTPServer extends Application implements EventHandler<ActionEvent>
 
             //Create a thread for the client
             //Instead of passing a Socket to the client thread, we pass the 1st packet
-            ClientThread ct = new ClientThread(recPacket); //client socket will be created in client thread
-            ct.start();
+            new ClientThread(recPacket).start(); //client socket will be created in client thread
             log("Starting Client Thread...");
          } //End of while loop
       } //End of run
