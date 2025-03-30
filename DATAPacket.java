@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * DATAPacket - a class to create and parse data datagram packets

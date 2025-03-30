@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * RRQPacket - a class to create and parse read request datagram packets

@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * Packet - a superclass to create and parse datagram packets

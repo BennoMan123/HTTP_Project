@@ -1,14 +1,14 @@
+import java.io.*;
+import java.net.*;
 import javafx.application.*;
 import javafx.event.*;
+import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
-import javafx.geometry.*;
-import java.net.*;
-import java.io.*;
 import javafx.stage.FileChooser.*;
 
 /**

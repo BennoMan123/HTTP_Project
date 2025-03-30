@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * ERRORPacket - a class to create and parse error datagram packets

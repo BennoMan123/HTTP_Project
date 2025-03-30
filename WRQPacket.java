@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * WRQPacket - a class to create and parse write request datagram packets

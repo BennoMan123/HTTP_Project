@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * ACKPacket - a class to create and parse acknowlegdement datagram packets
